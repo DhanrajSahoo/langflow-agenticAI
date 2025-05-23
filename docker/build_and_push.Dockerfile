@@ -43,16 +43,14 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-editable --extra postgresql
 
 COPY ./src /app/src
-COPY ./src/frontend /app/src/frontend
-WORKDIR /app/src/frontend
 
-# Build frontend with larger heap and output to backend static folder
+COPY src/frontend /tmp/src/frontend
+WORKDIR /tmp/src/frontend
 RUN --mount=type=cache,target=/root/.npm \
     npm ci \
-    && NODE_OPTIONS="--max-old-space-size=8192" npm run build \
-    && rm -rf /app/src/backend/langflow/frontend \
-    && cp -r build /app/src/backend/langflow/frontend
-
+    && npm run build \
+    && cp -r build /app/src/backend/langflow/frontend \
+    && rm -rf /tmp/src/frontend
 
 WORKDIR /app
 COPY ./pyproject.toml /app/pyproject.toml
@@ -95,73 +93,3 @@ ENV LANGFLOW_HOST=0.0.0.0
 ENV LANGFLOW_PORT=7860
 
 CMD ["langflow", "run"]
-
-# syntax=docker/dockerfile:1
-###############################################################################
-# 1. FRONTEND BUILDER — creates React static bundle
-###############################################################################
-# FROM node:lts-bookworm-slim AS frontend-builder
-
-# WORKDIR /app/frontend
-# COPY src/frontend/ ./
-# RUN npm ci \
-#  && NODE_OPTIONS="--max-old-space-size=4096" npm run build
-
-# ###############################################################################
-# # 2. BACKEND + VENV BUILDER
-# ###############################################################################
-# FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
-
-# WORKDIR /app
-# ENV UV_COMPILE_BYTECODE=1
-# ENV UV_LINK_MODE=copy
-
-# # system toolchain for wheels
-# RUN apt-get update && apt-get install -y build-essential git gcc \
-#  && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# # project metadata
-# COPY pyproject.toml uv.lock README.md /app/
-# # (no need to copy full src tree; backend code unchanged)
-
-# # install all deps incl. Langflow from PyPI
-# RUN --mount=type=cache,target=/root/.cache/uv \
-#     uv sync --frozen --no-editable --extra postgresql
-
-# # ── Inject freshly-built frontend into Langflow package inside the venv ──────
-# # this resolves the "old frontend still served" problem
-# RUN python - <<'PY'
-# import importlib.util, pathlib, shutil, sys
-# spec = importlib.util.find_spec("langflow")
-# pkg_dir = pathlib.Path(spec.origin).parent
-# frontend_dir = pkg_dir / "frontend"
-# shutil.rmtree(frontend_dir, ignore_errors=True)
-# frontend_dir.mkdir(parents=True, exist_ok=True)
-# print("Langflow package located at:", pkg_dir)
-# PY
-# COPY --from=frontend-builder /app/frontend/build/ \
-#      /app/.venv/lib/python*/site-packages/langflow/frontend/
-
-# ###############################################################################
-# # 3. SLIM RUNTIME IMAGE
-# ###############################################################################
-# FROM python:3.12.3-slim AS runtime
-
-# RUN apt-get update \
-#  && apt-get install -y --no-install-recommends curl libpq5 gnupg \
-#  && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# # non-root user
-# RUN useradd -u 1000 -g 0 -M -d /app/data user
-
-# # copy the venv with updated frontend
-# COPY --from=builder --chown=1000 /app/.venv /app/.venv
-
-# ENV PATH="/app/.venv/bin:$PATH"
-# ENV LANGFLOW_HOST=0.0.0.0
-# ENV LANGFLOW_PORT=7860
-
-# USER user
-# WORKDIR /app
-
-# CMD ["langflow", "run"]

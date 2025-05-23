@@ -33,11 +33,17 @@ export const ThemeButtons = () => {
     <div className="relative ml-auto inline-flex rounded-full border border-border">
       {/* Sliding Indicator - Behind the Buttons */}
       <div
-        className={`absolute bottom-0.5 left-[1px] top-0.5 w-1/2 rounded-full bg-amber-400 ${
+        className={`absolute bottom-0.5 left-[1px] top-0.5 w-[30%] rounded-full bg-amber-400 ${
           hasInteracted ? "transition-all duration-300" : ""
         } dark:bg-purple-400`}
         style={{
-          transform: `translateX(${selectedTheme === "light" ? "2%" : "112%"})`,
+          transform: `translateX(${
+            selectedTheme === "light"
+              ? "2%"
+              : selectedTheme === "dark"
+                ? "112%"
+                : "223%"
+          })`,
           zIndex: 0, // Ensure it's behind the buttons
         }}
       ></div>
@@ -70,6 +76,25 @@ export const ThemeButtons = () => {
         id="menu_dark_button"
       >
         <ForwardedIconComponent strokeWidth={2} name="Moon" className="w-4" />
+      </Button>
+
+      {/* System Theme Button */}
+      <Button
+        unstyled
+        className={`relative z-10 inline-flex items-center rounded-full px-1 ${
+          selectedTheme === "system"
+            ? "bg-foreground text-background"
+            : "hover:bg-foreground hover:text-background"
+        }`}
+        onClick={() => handleThemeChange("system")}
+        data-testid="menu_system_button"
+        id="menu_system_button"
+      >
+        <ForwardedIconComponent
+          name="Monitor"
+          className="w-4"
+          strokeWidth={2}
+        />
       </Button>
     </div>
   );

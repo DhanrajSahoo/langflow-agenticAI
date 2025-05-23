@@ -14,9 +14,8 @@ import { ExternalLink } from "lucide-react";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import { useShallow } from "zustand/react/shallow";
 import useFileDrop from "../hooks/use-on-file-drop";
-import ApexonLogo from "@/assets/Apexon_Logo_nobg.png";
 
-const EMPTY_PAGE_TITLE = "Welcome to Apexon Agents";
+const EMPTY_PAGE_TITLE = "Welcome to Langflow";
 const EMPTY_PAGE_DESCRIPTION = "Your new favorite way to ship Agents";
 const EMPTY_PAGE_GITHUB_DESCRIPTION =
   "Follow development, star the repo, and shape the future.";
@@ -68,12 +67,22 @@ export const EmptyPageCommunity = ({
         <div className="m-0 h-full w-full bg-background p-0">
           <div className="z-50 flex h-full w-full flex-col items-center justify-center gap-5">
             <div className="z-50 flex flex-col items-center gap-2">
-              <img
-                src={ApexonLogo}
-                alt="Apexon Logo"
-                data-testid="empty_page_logo"
-                className="relative top-3 h-24 w-24 object-contain"
-              />
+              <div className="z-50 dark:hidden">
+                <img
+                  src={logoLightPng}
+                  alt="Langflow Logo Light"
+                  data-testid="empty_page_logo_light"
+                  className="relative top-3"
+                />
+              </div>
+              <div className="z-50 hidden dark:block">
+                <img
+                  src={logoDarkPng}
+                  alt="Langflow Logo Dark"
+                  data-testid="empty_page_logo_dark"
+                  className="relative top-3"
+                />
+              </div>
               <span
                 data-testid="mainpage_title"
                 className="z-50 text-center font-chivo text-2xl font-medium text-foreground"
@@ -93,6 +102,66 @@ export const EmptyPageCommunity = ({
 
             <div className="flex w-full max-w-[510px] flex-col gap-7 sm:gap-[29px]">
               <Button
+                unstyled
+                className="group mx-3 h-[84px] sm:mx-0"
+                onClick={() => {
+                  handleUserTrack("github_starred")();
+                  window.open(GITHUB_URL, "_blank", "noopener,noreferrer");
+                }}
+                data-testid="empty_page_github_button"
+              >
+                <div className="relative flex flex-col rounded-lg border-[1px] bg-background p-4 transition-all duration-300 hover:border-accent-pink-foreground">
+                  <div className="grid w-full items-center justify-between gap-2">
+                    <div className="flex gap-3">
+                      <FaGithub className="h-6 w-6" />
+                      <div>
+                        <span className="font-semibold">GitHub</span>
+                        <span className="ml-2 font-mono text-muted-foreground">
+                          {formatNumber(stars)}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-base text-secondary-foreground">
+                        {EMPTY_PAGE_GITHUB_DESCRIPTION}
+                      </span>
+                    </div>
+                  </div>
+                  <ExternalLink className={EXTERNAL_LINK_ICON_CLASS} />
+                </div>
+              </Button>
+
+              <Button
+                unstyled
+                className="group mx-3 h-[84px] sm:mx-0"
+                onClick={() => {
+                  handleUserTrack("discord_clicked")();
+                  window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
+                }}
+                data-testid="empty_page_discord_button"
+              >
+                <div className="relative flex flex-col rounded-lg border-[1px] bg-background p-4 transition-all duration-300 hover:border-discord-color">
+                  <div className="grid w-full items-center justify-between gap-2">
+                    <div className="flex gap-3">
+                      <FaDiscord className="h-6 w-6 text-discord-color" />
+                      <div>
+                        <span className="font-semibold">Discord</span>
+                        <span className="ml-2 font-mono text-muted-foreground">
+                          {formatNumber(discordCount)}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-base text-secondary-foreground">
+                        {EMPTY_PAGE_DISCORD_DESCRIPTION}
+                      </span>
+                    </div>
+                  </div>
+                  <ExternalLink className={EXTERNAL_LINK_ICON_CLASS} />
+                </div>
+              </Button>
+
+              <Button
                 variant="default"
                 className="z-10 m-auto mt-3 h-10 w-full max-w-[10rem] rounded-lg font-bold transition-all duration-300"
                 onClick={() => setOpenModal(true)}
@@ -109,6 +178,12 @@ export const EmptyPageCommunity = ({
             </div>
           </div>
         </div>
+        <p
+          data-testid="empty_page_drag_and_drop_text"
+          className="absolute bottom-5 left-0 right-0 mt-4 cursor-default text-center text-xxs text-muted-foreground"
+        >
+          {EMPTY_PAGE_DRAG_AND_DROP_TEXT}
+        </p>
       </CardsWrapComponent>
     </DotBackgroundDemo>
   );
