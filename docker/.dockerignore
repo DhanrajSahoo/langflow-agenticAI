@@ -1,0 +1,7 @@
+.venv/
+node_modules
+**/node_modules/
+dist/
+**/build/
+**/langflow-pre.db
+**/langflow.db
