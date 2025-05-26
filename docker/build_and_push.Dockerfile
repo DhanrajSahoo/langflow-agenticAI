@@ -32,6 +32,7 @@ RUN --mount=type=cache,target=/root/.npm \
  && mkdir -p /app/.venv/lib/python3.12/site-packages/langflow/frontend \
  && cp -r build/* /app/.venv/lib/python3.12/site-packages/langflow/frontend/
 
+
 ################################
 # RUNTIME
 ################################
@@ -49,11 +50,6 @@ RUN apt-get update && apt-get install -y \
 COPY --from=builder --chown=1000 /app/.venv /app/.venv
 # copy source with built frontend
 COPY --from=builder --chown=1000 /app/src /app/src
-
-# Install langflow from source to pick up backend changes
-WORKDIR /app/src/backend/base
-RUN /app/.venv/bin/pip install -e . --no-deps
-WORKDIR /app
 
 ENV PATH="/app/.venv/bin:$PATH" \
     LANGFLOW_HOST=0.0.0.0 \
