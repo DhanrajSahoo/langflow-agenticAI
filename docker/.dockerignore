@@ -1,7 +1,15 @@
-.venv/
+.venv
+__pycache__
+**/aws
 node_modules
 **/node_modules/
 dist/
 **/build/
+src/backend/base/langflow/frontend
 **/langflow-pre.db
 **/langflow.db
+logs
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
