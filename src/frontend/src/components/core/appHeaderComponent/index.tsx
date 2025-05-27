@@ -5,6 +5,7 @@ import ForwardedIconComponent from "@/components/common/genericIconComponent";
 import ShadTooltip from "@/components/common/shadTooltipComponent";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { DATASTAX_DOCS_URL, DOCS_URL } from "@/constants/constants";
 import CustomAccountMenu from "@/customization/components/custom-AccountMenu";
 import CustomLangflowCounts from "@/customization/components/custom-langflow-counts";
 import { CustomOrgSelector } from "@/customization/components/custom-org-selector";
@@ -17,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import { AccountMenu } from "./components/AccountMenu";
 import FlowMenu from "./components/FlowMenu";
 import LangflowCounts from "./components/langflow-counts";
+import { cn } from "@/utils/utils";
 
 export default function AppHeader(): JSX.Element {
   const notificationCenter = useAlertStore((state) => state.notificationCenter);
@@ -99,6 +101,21 @@ export default function AppHeader(): JSX.Element {
             {/* <CustomLangflowCounts /> */}
           </Button>
         </>
+        
+        <ShadTooltip content="Settings">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => navigate("/settings")}
+          >
+            <ForwardedIconComponent
+              name="Settings"
+              className="h-4 w-4"
+            />
+          </Button>
+        </ShadTooltip>
+        
         <Separator
           orientation="vertical"
           className="my-auto ml-3 h-7 dark:border-zinc-700"
