@@ -11,7 +11,9 @@ ENV UV_COMPILE_BYTECODE=1 \
 
 # ---- base system packages -------------------------------------------
 RUN apt-get update && apt-get install --no-install-recommends -y \
-        build-essential git gcc npm \
+        build-essential git gcc curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # ---- copy entire repo -----------------------------------------------
@@ -23,14 +25,23 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # ---- build the React UI ---------------------------------------------
 WORKDIR /app/src/frontend
+
+# Set Node options as ENV to ensure they're used
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Split the build process to manage memory better
 RUN --mount=type=cache,target=/root/.npm \
     npm config set fetch-retry-mintimeout 20000 \
  && npm config set fetch-retry-maxtimeout 120000 \
- && npm ci \
- && NODE_OPTIONS="--max-old-space-size=8192" npm run build \
+ && npm ci --legacy-peer-deps
+
+# Build in a separate RUN to better manage memory
+RUN npm run build \
  && rm -rf /app/.venv/lib/python*/site-packages/langflow/frontend \
  && mkdir -p /app/.venv/lib/python3.12/site-packages/langflow/frontend \
- && cp -r build/* /app/.venv/lib/python3.12/site-packages/langflow/frontend/
+ && cp -r build/* /app/.venv/lib/python3.12/site-packages/langflow/frontend/ \
+ && rm -rf node_modules \
+ && rm -rf build
 
 
 ################################
