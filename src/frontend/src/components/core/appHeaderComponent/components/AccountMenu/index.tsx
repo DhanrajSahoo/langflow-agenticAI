@@ -56,30 +56,6 @@ export const AccountMenu = () => {
         </HeaderMenuToggle>
         <HeaderMenuItems position="right" classNameSize="w-[272px]">
           <div className="divide-y divide-foreground/10">
-            {/* <div>
-              <div className="h-[44px] items-center px-4 pt-3">
-                <div className="flex items-center justify-between">
-                  <span
-                    data-testid="menu_version_button"
-                    id="menu_version_button"
-                    className="text-sm"
-                  >
-                    Version
-                  </span>
-                  <div
-                    className={cn(
-                      "float-right text-xs",
-                      isLatestVersion && "text-accent-emerald-foreground",
-                      !isLatestVersion && "text-accent-amber-foreground",
-                    )}
-                  >
-                    {version}{" "}
-                    {isLatestVersion ? "(latest)" : "(update available)"}
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div>
               <HeaderMenuItemButton
                 onClick={() => {
@@ -110,15 +86,7 @@ export const AccountMenu = () => {
                   </HeaderMenuItemButton>
                 </div>
               )}
-              <HeaderMenuItemLink
-                newPage
-                href={ENABLE_DATASTAX_LANGFLOW ? DATASTAX_DOCS_URL : DOCS_URL}
-              >
-                <span data-testid="menu_docs_button" id="menu_docs_button">
-                  Docs
-                </span>
-              </HeaderMenuItemLink>
-            </div> */}
+            </div>
 
             <div>
               {/* Removed GitHub, Discord, and X links */}
