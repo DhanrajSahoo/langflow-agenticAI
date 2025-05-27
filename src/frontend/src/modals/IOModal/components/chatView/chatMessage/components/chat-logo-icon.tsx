@@ -1,13 +1,10 @@
-import LangflowLogo from "@/assets/LangflowLogo.svg?react";
+import ApexonIcon from "@/components/common/apexonIcon";
 
 export default function LogoIcon() {
   return (
-    <div className="relative flex h-8 w-8 items-center justify-center rounded-md bg-muted">
-      <div className="flex h-8 w-8 items-center justify-center">
-        <LangflowLogo
-          title="Langflow Logo"
-          className="absolute h-[18px] w-[18px]"
-        />
+    <div className="relative flex h-8 w-10 items-center justify-center rounded-md bg-white">
+      <div className="flex h-8 w-10 items-center justify-center">
+        <ApexonIcon className="h-[16px] w-auto max-w-8" />
       </div>
     </div>
   );

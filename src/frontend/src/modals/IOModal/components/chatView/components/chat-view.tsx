@@ -1,4 +1,4 @@
-import LangflowLogo from "@/assets/LangflowLogo.svg?react";
+import ApexonIcon from "@/components/common/apexonIcon";
 import { TextEffectPerChar } from "@/components/ui/textAnimation";
 import { ENABLE_IMAGE_ON_PLAYGROUND } from "@/customization/feature-flags";
 import { track } from "@/customization/utils/analytics";
@@ -251,10 +251,9 @@ export default function ChatView({
             <>
               <div className="flex h-full w-full flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center gap-4 p-8">
-                  <LangflowLogo
-                    title="Langflow logo"
-                    className="h-10 w-10 scale-[1.5]"
-                  />
+                  <div className="flex h-12 w-16 items-center justify-center rounded-md bg-white p-2">
+                    <ApexonIcon className="h-8 w-auto max-w-12" />
+                  </div>
                   <div className="flex flex-col items-center justify-center">
                     <h3 className="mt-2 pb-2 text-2xl font-semibold text-primary">
                       New chat

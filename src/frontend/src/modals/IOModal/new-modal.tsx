@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 import { v5 as uuidv5 } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 import LangflowLogoColor from "../../assets/LangflowLogoColor.svg?react";
+import ApexonIcon from "../../components/common/apexonIcon";
 import IconComponent from "../../components/common/genericIconComponent";
 import ShadTooltip from "../../components/common/shadTooltipComponent";
 import { Button } from "../../components/ui/button";
@@ -305,13 +306,17 @@ export default function IOModal({
                     <div
                       className={cn(
                         `flex rounded p-1`,
-                        swatchColors[swatchIndex],
+                        playgroundPage ? "bg-white" : swatchColors[swatchIndex],
                       )}
                     >
-                      <IconComponent
-                        name={flowIcon ?? "Workflow"}
-                        className="h-3.5 w-3.5"
-                      />
+                      {playgroundPage ? (
+                        <ApexonIcon className="h-3.5 w-3.5" />
+                      ) : (
+                        <IconComponent
+                          name={flowIcon ?? "Workflow"}
+                          className="h-3.5 w-3.5"
+                        />
+                      )}
                     </div>
                     {sidebarOpen && (
                       <div className="truncate font-semibold">
@@ -358,8 +363,8 @@ export default function IOModal({
                       variant="primary"
                       className="w-full !rounded-xl shadow-lg"
                     >
-                      <LangflowLogoColor />
-                      <div className="text-sm">Built with Langflow</div>
+                      <ApexonIcon className="h-[18px] w-[18px]" />
+                      <div className="text-sm">Built with Apexon</div>
                     </Button>
                   </div>
                 )}
@@ -370,14 +375,14 @@ export default function IOModal({
                 <ShadTooltip
                   styleClasses="z-50"
                   side="right"
-                  content="Built with Langflow"
+                  content="Built with Apexon"
                 >
                   <Button
                     variant="primary"
                     className="h-12 w-12 !rounded-xl !p-4 shadow-lg"
                     onClick={LangflowButtonClick}
                   >
-                    <LangflowLogoColor className="h-[18px] w-[18px] scale-150" />
+                    <ApexonIcon className="h-[18px] w-[18px] scale-150" />
                   </Button>
                 </ShadTooltip>
               </div>
